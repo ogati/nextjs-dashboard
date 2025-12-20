@@ -1,2 +1,2 @@
 # nextjs-dashboard
-A repo for nextjs-dashboard project
+A repo for nextjs-dashboard project.
