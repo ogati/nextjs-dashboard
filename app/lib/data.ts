@@ -55,7 +55,6 @@ export async function fetchCardData() {
          FROM invoices`;
     
     // We artificially delay a response for demo purposes. Don't do this in production
-    console.log('Fetching invoice data...');
     await new Promise((resolve) => setTimeout(resolve, 2000));
 
     const data = await Promise.all([

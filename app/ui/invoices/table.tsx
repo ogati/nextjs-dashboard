@@ -42,7 +42,7 @@ export default async function InvoicesTable({query, currentPage}: {query: string
                   </div>
                   <div className="flex justify-end gap-2">
                     <UpdateInvoice id={invoice.id} />
-                    <DeleteInvoice id={invoice.id} />
+                    <DeleteInvoice id={invoice.id} query={query} />
                   </div>
                 </div>
               </div>
@@ -104,7 +104,7 @@ export default async function InvoicesTable({query, currentPage}: {query: string
                   <td className="whitespace-nowrap py-3 pl-6 pr-3">
                     <div className="flex justify-end gap-3">
                       <UpdateInvoice id={invoice.id} />
-                      <DeleteInvoice id={invoice.id} />
+                      <DeleteInvoice id={invoice.id} query={query}/>
                     </div>
                   </td>
                 </tr>
