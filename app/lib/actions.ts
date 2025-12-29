@@ -4,7 +4,7 @@ import { z } from 'zod';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import postgres from 'postgres';
-import { InvoiceFormError } from './definitions';
+import { InvoiceFormState } from './definitions';
 import { toInvoiceFieldErrors } from './utils';
 
 const sql = postgres(process.env.POSTGRES_URL!, { ssl: 'require' });
@@ -22,7 +22,7 @@ const Invoice = z.object({
   date: z.string(),
 }).omit({ id: true, date: true });
 
-export async function createInvoice(prevState: InvoiceFormError, formData: FormData) {
+export async function createInvoice(prevState: InvoiceFormState, formData: FormData) {
   const validatedFields  = Invoice.safeParse(Object.fromEntries(formData.entries()));
   if (!validatedFields.success) {
     return {
@@ -50,7 +50,7 @@ export async function createInvoice(prevState: InvoiceFormError, formData: FormD
   redirect(route);
 }
 
-export async function updateInvoice(id: string, prevState: InvoiceFormError, formData: FormData) {
+export async function editInvoice(id: string, prevState: InvoiceFormState, formData: FormData) {
   const validatedFields  = Invoice.safeParse(Object.fromEntries(formData.entries()));
   if (!validatedFields.success) {
     return {

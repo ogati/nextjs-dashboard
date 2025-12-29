@@ -6,10 +6,10 @@ import { CheckIcon, ClockIcon, CurrencyDollarIcon, UserCircleIcon } from '@heroi
 import { Button } from '@/app/ui/button';
 import { createInvoice } from '@/app/lib/actions';
 import { useActionState } from 'react';
-import { InvoiceFormError } from '@/app/lib/definitions';
+import { InvoiceFormState } from '@/app/lib/definitions';
 
 export default function CreateInvoiceForm({ customers }: { customers: CustomerField[] }) {
-  const initialState: InvoiceFormError = {message: null, errors: {}};
+  const initialState: InvoiceFormState = {message: null, errors: {}};
   const [state, formAction] = useActionState(createInvoice, initialState);
 
   return (
