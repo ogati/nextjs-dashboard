@@ -9,8 +9,7 @@ import { useActionState } from 'react';
 import { InvoiceFormState } from '@/app/lib/definitions';
 
 export default function CreateInvoiceForm({ customers }: { customers: CustomerField[] }) {
-  const initialState: InvoiceFormState = {message: null, errors: {}};
-  const [state, formAction] = useActionState(createInvoice, initialState);
+  const [state, formAction] = useActionState(createInvoice, {message: null, errors: {}} as InvoiceFormState);
 
   return (
     <form action={formAction}>

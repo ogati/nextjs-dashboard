@@ -10,8 +10,7 @@ import { useActionState } from 'react';
 
 export default function EditInvoiceForm({invoice, customers}: {invoice: InvoiceForm; customers: CustomerField[]}) {
   const boundAction = editInvoice.bind(null, invoice.id);
-  const initialState: InvoiceFormState = {message: null, errors: {}};
-  const [state, formAction] = useActionState(boundAction, initialState);
+  const [state, formAction] = useActionState(boundAction, {message: null, errors: {}} as InvoiceFormState);
 
   return (
     <form action={formAction}>
