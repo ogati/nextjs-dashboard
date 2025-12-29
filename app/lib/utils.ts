@@ -1,3 +1,4 @@
+import { ZodError } from 'zod';
 import { Revenue } from './definitions';
 
 export const formatCurrency = (amount: number) => {
@@ -67,3 +68,17 @@ export const generatePagination = (currentPage: number, totalPages: number) => {
     totalPages,
   ];
 };
+
+export const toInvoiceFieldErrors = (error: ZodError): {customerId?: string[]; amount?: string[]; status?: string[]} => {
+  const fieldErrors: Record<PropertyKey, string[]> = {};
+
+  for (const issue of error.issues) {
+    const field = issue.path[0];
+    if (!field) continue;
+    
+    fieldErrors[field] ??= [];
+    fieldErrors[field].push(issue.message);
+  }
+
+  return fieldErrors;
+}
