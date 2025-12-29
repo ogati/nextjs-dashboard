@@ -83,9 +83,7 @@ export async function deleteInvoice(id: string, query: string) {
     await sql`DELETE FROM invoices WHERE id = ${id}`;
   } catch (err) {
     console.error(err);
-    return {
-      message: 'Database Error: Failed to delete Invoice.'
-    };
+    throw err;
   }
   
   const route = `/dashboard/invoices${query && `?query=${query}`}`
