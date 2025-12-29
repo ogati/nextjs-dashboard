@@ -50,7 +50,15 @@ export async function createInvoice(prevState: InvoiceFormError, formData: FormD
   redirect(route);
 }
 
-export async function updateInvoice(id: string, formData: FormData) {
+export async function updateInvoice(id: string, prevState: InvoiceFormError, formData: FormData) {
+  const validatedFields  = Invoice.safeParse(Object.fromEntries(formData.entries()));
+  if (!validatedFields.success) {
+    return {
+      message: 'Validation failed.',
+      errors: toInvoiceFieldErrors(validatedFields.error)
+    };
+  }
+
   const { customerId, amount, status } = Invoice.parse(Object.fromEntries(formData.entries()));
   const amountInCents = Math.round(amount * 100);
  
