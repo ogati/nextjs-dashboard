@@ -69,7 +69,8 @@ export const generatePagination = (currentPage: number, totalPages: number) => {
   ];
 };
 
-export const toInvoiceFieldErrors = (error: ZodError): {customerId?: string[]; amount?: string[]; status?: string[]} => {
+// export const toInvoiceFieldErrors = (error: ZodError): {customerId?: string[]; amount?: string[]; status?: string[]} => {
+export const toInvoiceFieldErrors = (error: ZodError) => {
   const fieldErrors: Record<PropertyKey, string[]> = {};
 
   for (const issue of error.issues) {

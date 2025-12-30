@@ -4,26 +4,42 @@ import { z } from 'zod';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import postgres from 'postgres';
-import { InvoiceFormState } from './definitions';
+import { FormState } from './definitions';
 import { toInvoiceFieldErrors } from './utils';
+import { signIn } from '@/auth';
+import { AuthError } from 'next-auth';
 
 const sql = postgres(process.env.POSTGRES_URL!, { ssl: 'require' });
 
 const Invoice = z.object({
   id: z.string(),
   customerId: z.preprocess(
-    v => v ?? '',
+    v => v?? '',
     z.string().min(1, 'Please select a customer.')
   ),
-  amount: z.coerce.number().gt(0, {message: 'Please enter an amount greater than $0.'}),
+  amount: z.coerce.number({ message: "Please enter a valid amount"} )
+            .refine(
+              n => Number.isInteger(n * 100), 
+              { message: "Please enter a valid amount with at most 2 decimal places"}
+            )
+            .refine(
+              n => n > 0,
+              { message: "Please enter an amount greater than $0."}
+            ),
   status: z.enum(['pending', 'paid'], {
     message: 'Please select an invoice status.'
   }),
   date: z.string(),
 }).omit({ id: true, date: true });
 
-export async function createInvoice(prevState: InvoiceFormState, formData: FormData) {
+// const Login = z.object({
+//   email: z.email({ message: "Please enter a valid email address" }),
+//   password: z.string().min(6, { message: "Password must be at least six characters long" })
+// });
+
+export async function createInvoice(prevState: FormState, formData: FormData) {
   const validatedFields  = Invoice.safeParse(Object.fromEntries(formData.entries()));
+
   if (!validatedFields.success) {
     return {
       message: 'Validation failed.',
@@ -50,7 +66,7 @@ export async function createInvoice(prevState: InvoiceFormState, formData: FormD
   redirect(route);
 }
 
-export async function editInvoice(id: string, prevState: InvoiceFormState, formData: FormData) {
+export async function editInvoice(id: string, prevState: FormState, formData: FormData) {
   const validatedFields  = Invoice.safeParse(Object.fromEntries(formData.entries()));
   if (!validatedFields.success) {
     return {
@@ -59,7 +75,7 @@ export async function editInvoice(id: string, prevState: InvoiceFormState, formD
     };
   }
 
-  const { customerId, amount, status } = Invoice.parse(Object.fromEntries(formData.entries()));
+  const { customerId, amount, status } = validatedFields.data;
   const amountInCents = Math.round(amount * 100);
  
   try {
@@ -89,4 +105,35 @@ export async function deleteInvoice(id: string, query: string) {
   const route = `/dashboard/invoices${query && `?query=${query}`}`
   revalidatePath(route);
   redirect(route);
+}
+
+// export async function authenticate(prevState: FormState | undefined, formData: FormData) {
+export async function authenticate(prevState: string | undefined, formData: FormData) {
+  // const validatedFields = Login.safeParse(Object.fromEntries(formData.entries()));
+  // if (!validatedFields.success) {
+  //   return {
+  //     message: 'Validation failed.',
+  //     errors: toInvoiceFieldErrors(validatedFields.error)
+  //   };
+  // }
+  try {
+    await signIn('credentials', formData);
+  } catch (error) {
+    if (error instanceof AuthError) {
+      switch (error.type) {
+        case 'CredentialsSignin':
+          // return {
+          //   message: 'Invalid credentials.'
+          // };
+          return 'Invalid credentials';
+        default:
+          // return {
+          //   message: 'Something went wrong.'
+          // };
+          return 'Something went wrong';
+      }
+    }
+    throw error;
+    // return { message: 'Something went wrong.' };
+  }
 }
