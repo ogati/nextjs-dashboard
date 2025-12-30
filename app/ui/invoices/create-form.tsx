@@ -6,10 +6,10 @@ import { CheckIcon, ClockIcon, CurrencyDollarIcon, UserCircleIcon } from '@heroi
 import { Button } from '@/app/ui/button';
 import { createInvoice } from '@/app/lib/actions';
 import { useActionState } from 'react';
-import { InvoiceFormState } from '@/app/lib/definitions';
+import { FormState } from '@/app/lib/definitions';
 
 export default function CreateInvoiceForm({ customers }: { customers: CustomerField[] }) {
-  const [state, formAction] = useActionState(createInvoice, {message: null, errors: {}} as InvoiceFormState);
+  const [state, formAction] = useActionState(createInvoice, {message: null, errors: {}} as FormState);
 
   return (
     <form action={formAction}>
@@ -58,8 +58,7 @@ export default function CreateInvoiceForm({ customers }: { customers: CustomerFi
               <input
                 id="amount"
                 name="amount"
-                type="number"
-                step="0.01"
+                type="text"
                 placeholder="Enter USD amount"
                 aria-describedby='amount-error'
                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
@@ -121,7 +120,7 @@ export default function CreateInvoiceForm({ customers }: { customers: CustomerFi
                 {error}
               </p>
             ))}
-        </div>
+          </div>
         </fieldset>
       </div>
       <div className="mt-6 flex justify-end gap-4">

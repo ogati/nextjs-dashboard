@@ -5,12 +5,12 @@ import { CheckIcon, ClockIcon, CurrencyDollarIcon, UserCircleIcon } from '@heroi
 import Link from 'next/link';
 import { Button } from '@/app/ui/button';
 import { editInvoice } from '@/app/lib/actions';
-import { InvoiceFormState } from '@/app/lib/definitions';
+import { FormState } from '@/app/lib/definitions';
 import { useActionState } from 'react';
 
 export default function EditInvoiceForm({invoice, customers}: {invoice: InvoiceForm; customers: CustomerField[]}) {
   const boundAction = editInvoice.bind(null, invoice.id);
-  const [state, formAction] = useActionState(boundAction, {message: null, errors: {}} as InvoiceFormState);
+  const [state, formAction] = useActionState(boundAction, {message: null, errors: {}} as FormState);
 
   return (
     <form action={formAction}>

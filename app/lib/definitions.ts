@@ -83,13 +83,9 @@ export type InvoiceForm = {
   customer_id: string;
   amount: number;
   status: 'pending' | 'paid';
-};
+}
 
-export type InvoiceFormState = {
+export type FormState = {
   message?: string | null;
-  errors?: {
-    customerId?: string[];
-    amount?: string[];
-    status?: string[]
-  }
+  errors?: Record<string, string[]>
 }
