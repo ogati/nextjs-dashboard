@@ -8,6 +8,7 @@ import { FormState } from './definitions';
 import { toInvoiceFieldErrors } from './utils';
 import { signIn } from '@/auth';
 import { AuthError } from 'next-auth';
+import { ErrorCode } from './definitions';
 
 const sql = postgres(process.env.POSTGRES_URL!, { ssl: 'require' });
 
@@ -31,11 +32,6 @@ const Invoice = z.object({
   }),
   date: z.string(),
 }).omit({ id: true, date: true });
-
-// const Login = z.object({
-//   email: z.email({ message: "Please enter a valid email address" }),
-//   password: z.string().min(6, { message: "Password must be at least six characters long" })
-// });
 
 export async function createInvoice(prevState: FormState, formData: FormData) {
   const validatedFields  = Invoice.safeParse(Object.fromEntries(formData.entries()));
@@ -107,33 +103,42 @@ export async function deleteInvoice(id: string, query: string) {
   redirect(route);
 }
 
-// export async function authenticate(prevState: FormState | undefined, formData: FormData) {
-export async function authenticate(prevState: string | undefined, formData: FormData) {
-  // const validatedFields = Login.safeParse(Object.fromEntries(formData.entries()));
-  // if (!validatedFields.success) {
-  //   return {
-  //     message: 'Validation failed.',
-  //     errors: toInvoiceFieldErrors(validatedFields.error)
-  //   };
-  // }
+const Login = z.object({
+  email: z.email({ message: "Please enter a valid email address" }),
+  password: z.string().min(6, { message: "Password must be at least six characters long" })
+});
+
+export async function authenticate(prevState: FormState | undefined, formData: FormData) {
+  const validatedFields = Login.safeParse(Object.fromEntries(formData.entries()));
+  
+  if (!validatedFields.success) {
+    return {
+      errors: toInvoiceFieldErrors(validatedFields.error)
+    };
+  }
+
   try {
     await signIn('credentials', formData);
   } catch (error) {
     if (error instanceof AuthError) {
-      switch (error.type) {
-        case 'CredentialsSignin':
-          // return {
-          //   message: 'Invalid credentials.'
-          // };
-          return 'Invalid credentials';
-        default:
-          // return {
-          //   message: 'Something went wrong.'
-          // };
-          return 'Something went wrong';
+      switch (error.cause?.err?.message) {
+        case ErrorCode.UserNotFound:
+          return {
+            errors: { email: ['User doesn\'t exist'] }
+          };
+        case ErrorCode.PasswordsNotMatch:
+          return {
+            errors: { password: ['Wrong credential'] }
+          };
       }
     }
-    throw error;
-    // return { message: 'Something went wrong.' };
+
+    if (error instanceof Error && error.message === "NEXT_REDIRECT") {
+      throw error; // must rethrow it if the error is NEXT_REDIRECT
+    }
+
+    return {
+      message: 'Something went wrong'
+    }
   }
 }

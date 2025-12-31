@@ -89,3 +89,11 @@ export type FormState = {
   message?: string | null;
   errors?: Record<string, string[]>
 }
+
+export const ErrorCode = {
+  UserNotFound: "USER_NOT_FOUND",
+  PasswordsNotMatch: 'PASSWORDS_NOT_MATCH'
+} as const; // as const makes the properties readonly
+
+export type ErrorCode = typeof ErrorCode[keyof typeof ErrorCode];
+  // union of ErrorCode object's values. can be accessed via the object's keys

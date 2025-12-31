@@ -7,13 +7,12 @@ import { Button } from './button';
 import { useActionState } from 'react';
 import { authenticate } from '../lib/actions';
 import { useSearchParams } from 'next/navigation';
-// import { FormState } from '../lib/definitions';
+import { FormState } from '../lib/definitions';
 
 export default function LoginForm() {
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get('callbackUrl') || '/dashboard';
-  const [errorMessage, formAction, isPending] = useActionState(authenticate, undefined);
-  // const [state, formAction, isPending] = useActionState(authenticate, {message: null, errors: {}} as FormState);
+  const [state, formAction, isPending] = useActionState(authenticate, {message: null, errors: {}} as FormState);
 
   return (
     <form action={formAction} className="space-y-3">
@@ -40,13 +39,13 @@ export default function LoginForm() {
               />
               <AtSymbolIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
             </div>
-            {/* <div id="email-error" aria-live="polite" aria-atomic="true">
-              {state.errors?.email && state.errors.email.map((error: string) => (
+            <div id="email-error" aria-live="polite" aria-atomic="true">
+              {state?.errors?.email && state.errors.email.map((error: string) => (
                 <p className="mt-2 text-sm text-red-500" key={error}>
                   {error}
                 </p>
               ))}
-            </div> */}
+            </div>
           </div>
           <div className="mt-4">
             <label
@@ -62,9 +61,17 @@ export default function LoginForm() {
                 type="password"
                 name="password"
                 placeholder="Enter password"
+                aria-describedby="password-error"
               />
               <KeyIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
             </div>
+          </div>
+          <div id="password-error" aria-live="polite" aria-atomic="true">
+            {state?.errors?.password && state.errors.password.map((error: string) => (
+              <p className="mt-2 text-sm text-red-500" key={error}>
+                {error}
+              </p>
+            ))}
           </div>
         </div>
         <input type="hidden" name="redirectTo" value={callbackUrl} />
@@ -72,10 +79,12 @@ export default function LoginForm() {
           Log in <ArrowRightIcon className="ml-auto h-5 w-5 text-gray-50" />
         </Button>
         <div className="flex h-8 items-end space-x-1" aria-live="polite" aria-atomic="true">
-          {errorMessage && (
+          {state?.message && (
             <>
               <ExclamationCircleIcon className="h-5 w-5 text-red-500" />
-              <p className="text-sm text-red-500">{errorMessage}</p>
+              <p className="mt-2 text-sm text-red-500">
+                {state.message}
+              </p>
             </>
           )}
         </div>
