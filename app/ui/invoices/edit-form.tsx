@@ -119,7 +119,7 @@ export default function EditInvoiceForm({invoice, customers}: {invoice: InvoiceF
         >
           Cancel
         </Link>
-        <Button type="submit">Edit Invoice</Button>
+        <Button type="submit">Save Invoice</Button>
       </div>
     </form>
   );
