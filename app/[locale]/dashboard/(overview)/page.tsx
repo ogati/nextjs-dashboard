@@ -7,17 +7,20 @@ import CardWrapper from '../../ui/dashboard/cards';
 import { Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';
 
-export const metadata: Metadata = {
-  title: 'Home'
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations('dashboard');
+
+  return {
+    title: t('title')
+  };
 }
 
 export default async function Page() {
   const t = await getTranslations('dashboard');
-  const t2 = await getTranslations('invoices');
   return (
     <main>
       <h1 className={`${lusitana.className} mb-4 text-xl md:text-2xl`}>
-        { t('title') } * { t2('title') }
+        { t('title') }
       </h1>
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
         <Suspense fallback={<CardsSkeleton />}>

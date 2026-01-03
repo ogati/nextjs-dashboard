@@ -1,4 +1,7 @@
 {
-  "dashboard": "Dashboard",
-  "title": "Hi"
+  "title": "Dashboard",
+  "recentRevenue": "Recent Revenue",
+  "latestInvoices": "Latest Invoices",
+  "last12Months": "Last 12 months",
+  "updatedJustNow": "Updated just now"
 }

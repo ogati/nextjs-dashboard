@@ -1,4 +1,7 @@
 {
-  "dashboard": "Dashboard (fr)",
-  "title": "Hi (fr)"
+  "title": "Dashboard (fr)",
+  "recentRevenue": "Recent Revenue (fr)",
+  "latestInvoices": "Latest Invoices (fr)",
+  "last12Months": "Last 12 months (fr)",
+  "updatedJustNow": "Updated just now (fr)"
 }

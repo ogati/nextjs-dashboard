@@ -1,9 +1,16 @@
 import { Metadata } from 'next';
+import { getTranslations } from 'next-intl/server';
 
-export const metadata: Metadata = {
-  title: 'Customers'
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations('customers');
+
+  return {
+    title: t('title')
+  };
 }
 
-export default function Page() {
-  return <p>Customers Page</p>;
+export default async function Page() {
+  const t = await getTranslations('customers');
+
+  return <p>{ t('title') }</p>;
 }

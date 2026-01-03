@@ -8,8 +8,11 @@ import { useActionState } from 'react';
 import { authenticate } from '../lib/actions';
 import { useSearchParams } from 'next/navigation';
 import { FormState } from '../lib/types';
+import { useLocale, useTranslations } from 'next-intl';
 
-export default function LoginForm({ locale }: { locale: string }) {
+export default function LoginForm() {
+  const t = useTranslations('login');
+  const locale = useLocale();
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get('callbackUrl') || `/${locale}/dashboard`;
   const [state, formAction, isPending] = useActionState(authenticate, {message: null, errors: {}} as FormState);
@@ -18,7 +21,7 @@ export default function LoginForm({ locale }: { locale: string }) {
     <form action={formAction} className="space-y-3">
       <div className="flex-1 rounded-lg bg-gray-50 px-6 pb-4 pt-8">
         <h1 className={`${lusitana.className} mb-3 text-2xl`}>
-          Please log in to continue.
+          { t('title') }
         </h1>
         <div className="w-full">
           <div>
@@ -26,7 +29,7 @@ export default function LoginForm({ locale }: { locale: string }) {
               className="mb-3 mt-5 block text-xs font-medium text-gray-900"
               htmlFor="email"
             >
-              Email
+              { t('email') }
             </label>
             <div className="relative">
               <input
@@ -52,7 +55,7 @@ export default function LoginForm({ locale }: { locale: string }) {
               className="mb-3 mt-5 block text-xs font-medium text-gray-900"
               htmlFor="password"
             >
-              Password
+              { t('password') }
             </label>
             <div className="relative">
               <input
@@ -76,7 +79,7 @@ export default function LoginForm({ locale }: { locale: string }) {
         </div>
         <input type="hidden" name="redirectTo" value={callbackUrl} />
         <Button className="mt-4 w-full" aria-disabled={isPending}>
-          Log in <ArrowRightIcon className="ml-auto h-5 w-5 text-gray-50" />
+          { t('login') } <ArrowRightIcon className="ml-auto h-5 w-5 text-gray-50" />
         </Button>
         <div className="flex h-8 items-end space-x-1" aria-live="polite" aria-atomic="true">
           {state?.message && (

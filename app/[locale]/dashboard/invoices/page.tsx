@@ -6,10 +6,15 @@ import { lusitana } from '../../ui/fonts';
 import { InvoicesTableSkeleton } from '../../ui/skeletons';
 import { Suspense } from 'react';
 import { fetchInvoicesPages } from '../../lib/data';
-import { Metadata } from 'next';
+import type { Metadata } from 'next';
+import { getTranslations } from 'next-intl/server';
 
-export const metadata: Metadata = {
-  title: 'Invoices'
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations('invoices');
+
+  return {
+    title: t('title')
+  };
 }
 
 export default async function Page({searchParams}: {
@@ -18,6 +23,7 @@ export default async function Page({searchParams}: {
     page?: string;
   }>
 }) {
+  const t = await getTranslations('invoices');
   const params = await searchParams;
   const query = params?.query || '';
   const currentPage = Number(params?.page) || 1;
@@ -26,7 +32,7 @@ export default async function Page({searchParams}: {
   return (
     <div className="w-full">
       <div className="flex w-full items-center justify-between">
-        <h1 className={`${lusitana.className} text-2xl`}>Invoices</h1>
+        <h1 className={`${lusitana.className} text-2xl`}>{ t('title') }</h1>
       </div>
       <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
         <Search placeholder="Search invoices..." />

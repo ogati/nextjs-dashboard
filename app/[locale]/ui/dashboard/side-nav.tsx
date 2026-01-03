@@ -3,8 +3,12 @@ import NavLinks from '../../ui/dashboard/nav-links';
 import AcmeLogo from '../../ui/acme-logo';
 import { PowerIcon } from '@heroicons/react/24/outline';
 import { signOut } from '@/auth';
+import { getLocale, getTranslations } from 'next-intl/server';
 
-export default async function SideNav({ locale }: { locale: string }) {
+export default async function SideNav() {
+  const locale = await getLocale();
+  const t = await getTranslations('sideNav');
+  
   return (
     <div className="flex h-full flex-col px-3 py-4 md:px-2">
       <Link
@@ -26,7 +30,7 @@ export default async function SideNav({ locale }: { locale: string }) {
         }>
           <button className="flex h-[48px] w-full grow items-center justify-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-medium hover:bg-sky-100 hover:text-blue-600 md:flex-none md:justify-start md:p-2 md:px-3">
             <PowerIcon className="w-6" />
-            <div className="hidden md:block">Sign Out</div>
+            <div className="hidden md:block">{ t('signOut') }</div>
           </button>
         </form>
       </div>

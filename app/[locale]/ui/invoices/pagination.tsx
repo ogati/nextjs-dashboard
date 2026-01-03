@@ -5,7 +5,6 @@ import clsx from 'clsx';
 import Link from 'next/link';
 import { generatePagination } from '../../lib/utils';
 import { usePathname, useSearchParams } from 'next/navigation';
-import { useTranslations } from 'next-intl';
 
 export default function Pagination({totalPages}: {totalPages: number}) {
   const pathname = usePathname();
@@ -19,10 +18,8 @@ export default function Pagination({totalPages}: {totalPages: number}) {
   };
 
   const allPages = generatePagination(currentPage, totalPages);
-  const t = useTranslations('invoices');
   return (
     <>
-        { t('title') }
       <div className="inline-flex">
         <PaginationArrow
           direction="left"

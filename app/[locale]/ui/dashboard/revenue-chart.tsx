@@ -2,6 +2,7 @@ import { generateYAxis } from '../../lib/utils';
 import { CalendarIcon } from '@heroicons/react/24/outline';
 import { lusitana } from '../../ui/fonts';
 import { fetchRevenue } from '../../lib/data';
+import { getTranslations } from 'next-intl/server';
 
 // This component is representational only.
 // For data visualization UI, check out:
@@ -10,6 +11,7 @@ import { fetchRevenue } from '../../lib/data';
 // https://airbnb.io/visx/
 
 export default async function RevenueChart() {
+  const t = await getTranslations('dashboard');
   const revenue = await fetchRevenue();
   const chartHeight = 350;
   const { yAxisLabels, topLabel } = generateYAxis(revenue);
@@ -21,7 +23,7 @@ export default async function RevenueChart() {
   return (
     <div className="w-full md:col-span-4">
       <h2 className={`${lusitana.className} mb-4 text-xl md:text-2xl`}>
-        Recent Revenue
+        { t('recentRevenue') }
       </h2>
       <div className="rounded-xl bg-gray-50 p-4">
         <div className="sm:grid-cols-13 mt-0 grid grid-cols-12 items-end gap-2 rounded-md bg-white p-4 md:gap-4">
@@ -50,7 +52,7 @@ export default async function RevenueChart() {
         </div>
         <div className="flex items-center pb-2 pt-6">
           <CalendarIcon className="h-5 w-5 text-gray-500" />
-          <h3 className="ml-2 text-sm text-gray-500 ">Last 12 months</h3>
+          <h3 className="ml-2 text-sm text-gray-500 ">{ t('last12Months') }</h3>
         </div>
       </div>
     </div>

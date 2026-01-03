@@ -5,8 +5,8 @@ import { NextIntlClientProvider } from 'next-intl';
 
 export const metadata: Metadata = {
   title: {
-    template: '%s | Acme Dashboard',
-    default: 'Acme Dashboard'
+    template: '%s | Acme',
+    default: 'Acme'
   },
   description: 'A Next.js application, built with App Router.',
   metadataBase: new URL('https://next-learn-dashboard.vercel.sh'),

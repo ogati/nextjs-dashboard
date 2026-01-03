@@ -12,8 +12,12 @@ export default getRequestConfig(async ({ requestLocale } ) => {
   return {
     locale,
     messages: {
+      home: (await import(`../messages/${locale}/home.json`)).default,
       dashboard: (await import(`../messages/${locale}/dashboard.json`)).default,
-      invoices: (await import(`../messages/${locale}/invoices.json`)).default
+      invoices: (await import(`../messages/${locale}/invoices.json`)).default,
+      customers: (await import(`../messages/${locale}/customers.json`)).default,
+      login: (await import(`../messages/${locale}/login.json`)).default,
+      sideNav: (await import(`../messages/${locale}/sideNav.json`)).default
     }
   };
 });
