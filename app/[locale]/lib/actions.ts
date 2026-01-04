@@ -9,6 +9,7 @@ import { toInvoiceFieldErrors } from './utils';
 import { signIn } from '@/auth';
 import { AuthError } from 'next-auth';
 import { ErrorCode } from './types';
+import { getLocale } from 'next-intl/server';
 
 const sql = postgres(process.env.POSTGRES_URL!, { ssl: 'require' });
 
@@ -57,7 +58,8 @@ export async function createInvoice(prevState: FormState, formData: FormData) {
     throw err;
   }
 
-  const route = '/dashboard/invoices';
+  const locale = getLocale();
+  const route = `/${locale}/dashboard/invoices`;
   revalidatePath(route);
   redirect(route);
 }
@@ -85,7 +87,8 @@ export async function editInvoice(id: string, prevState: FormState, formData: Fo
     throw err;
   }
   
-  const route = '/dashboard/invoices';
+  const locale = getLocale();
+  const route = `/${locale}/dashboard/invoices`;
   revalidatePath(route);
   redirect(route);
 }
@@ -98,7 +101,8 @@ export async function deleteInvoice(id: string, query: string) {
     throw err;
   }
   
-  const route = `/dashboard/invoices${query && `?query=${query}`}`
+  const locale = await getLocale();
+  const route = `/${locale}/dashboard/invoices${query && `?query=${query}`}`
   revalidatePath(route);
   redirect(route);
 }

@@ -1,4 +1,4 @@
-import Form from '../../../../ui/invoices/edit-form';
+import Form from '@/app/[locale]/ui/invoices/edit-form';
 import Breadcrumbs from '../../../../ui/invoices/breadcrumbs';
 import { fetchInvoiceById, fetchCustomers } from '../../../../lib/data';
 import { notFound } from 'next/navigation';
@@ -8,8 +8,8 @@ export const metadata: Metadata = {
   title: 'Edit Invoice'
 }
 
-export default async function Page({params}: { params: Promise<{ id: string }> }) {
-  const id = (await params).id;
+export default async function Page({params}: { params: Promise<{ id: string}> }) {
+  const { id } = await params;
   const [invoice, customers] = await Promise.all([
     fetchInvoiceById(id),
     fetchCustomers(),

@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { lusitana } from './ui/fonts';
 import { getTranslations } from 'next-intl/server';
 import { Metadata } from 'next/types';
+import LanguageToggle from './ui/language-toggler';
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations('home');
@@ -19,7 +20,10 @@ export default async function Page({ params }: { params: Promise<{ locale: strin
   const { locale } = await params;
 
   return (
-    <main className="flex min-h-screen flex-col p-6">
+    <main className="flex min-h-screen flex-col px-6 pt-1">
+      <div className="text-right pb-1">
+        <LanguageToggle/>
+      </div>
       <div className="flex h-20 shrink-0 items-end rounded-lg bg-blue-500 p-4 md:h-52">
         <AcmeLogo />
       </div>
